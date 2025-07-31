@@ -15,6 +15,7 @@ package llvm
 /*
 #include "llvm-c/Core.h"
 #include "llvm-c/ExecutionEngine.h"
+#include "executionengine.h"
 #include <stdlib.h>
 */
 import "C"
@@ -193,4 +194,10 @@ func (ee ExecutionEngine) AddGlobalMapping(global Value, addr unsafe.Pointer) {
 
 func (ee ExecutionEngine) PointerToGlobal(global Value) unsafe.Pointer {
 	return C.LLVMGetPointerToGlobal(ee.C, global.C)
+}
+
+func (ee ExecutionEngine) AddObjectFileByFilename(name string) int {
+	cname := C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	return int(C.LLVMAddObjectFileByFilename(ee.C, cname))
 }
