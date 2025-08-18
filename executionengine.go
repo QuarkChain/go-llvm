@@ -201,3 +201,7 @@ func (ee ExecutionEngine) AddObjectFileByFilename(name string) int {
 	defer C.free(unsafe.Pointer(cname))
 	return int(C.LLVMAddObjectFileByFilename(ee.C, cname))
 }
+
+func (ee ExecutionEngine) AddObjectFileFromBuffer(buf []byte) int {
+	return int(C.LLVMAddObjectFileFromBuffer(ee.C, (*C.char)(unsafe.Pointer(&buf[0])), C.size_t(len(buf))))
+}
